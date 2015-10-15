@@ -15,3 +15,4 @@ moodle_summary:     "A virtual machine for developing Moodle."
 moodle_plugins:     []
 moodle_plugins_dev: []
 moodle_patches:     []
+moodle_tag:         HEAD
