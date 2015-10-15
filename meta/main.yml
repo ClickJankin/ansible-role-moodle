@@ -1,0 +1,16 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: hcpss-banderson
+  description: Moodle LMS
+  company: HCPSS
+  license: "license (BSD, MIT)"
+  min_ansible_version: 1.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  categories:
+    - development
+    - web
