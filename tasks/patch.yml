@@ -1,7 +1,7 @@
 ---
 - name: Apply patches to Moodle
   patch:
-    src: "{{ item.src }}"
+    src: "{{ playbook_dir }}/{{ item.src }}"
     dest: "{{ item.dest }}"
     remote_src: False
   with_items: "{{ moodle_patches }}"
