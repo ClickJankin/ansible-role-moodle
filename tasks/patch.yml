@@ -3,5 +3,5 @@
   patch:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    remote_src: True
+    remote_src: False
   with_items: "{{ moodle_patches }}"
