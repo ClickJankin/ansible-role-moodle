@@ -43,7 +43,7 @@ moodle_plugins:
   # This is an example of a plugin hosted on github
   - name: theme_vision
     shortname: vision
-    url: "https://github.com/HCPSS/moodle-theme_vision.git"
+    url: "https://github.com/VENDOR/PUBLIC_REPO.git"
     destination: theme
 
     # Optional, defaults to HEAD
@@ -53,7 +53,7 @@ moodle_plugins:
   # An Example of a plugin hosted on a github private repo
   - name: local_mycoplugin
     shortname: mycoplugin
-    url: "https://github.com/VENDOR/REPO.git"
+    url: "https://github.com/VENDOR/PRIVATE_REPO.git"
     destination: local
     service: github
     tag: v1.0.0
