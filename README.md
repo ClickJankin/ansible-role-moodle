@@ -59,7 +59,7 @@ moodle_plugins:
     tag: v1.0.0
     
     # Your github personal access token. I'll use mine from above...
-    auth: "{{ github_access_token }}"
+    auth: "MYSECRETGITHUBTOKEN"
 
 # Patches to apply to the Moodle installation. The "patches" folder is supplied
 # and ignored by .gitignore as a convenient place to put the patch files. But
