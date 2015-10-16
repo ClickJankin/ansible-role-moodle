@@ -61,9 +61,8 @@ moodle_plugins:
     # Your github personal access token.
     auth: "MYSECRETGITHUBTOKEN"
 
-# Patches to apply to the Moodle installation. The "patches" folder is supplied
-# and ignored by .gitignore as a convenient place to put the patch files. But
-# they can be put anywhere
+# Patches to apply to the Moodle installation. The "dest" should be relative to 
+# playbook that is running this role.
 moodle_patches:
   - src: patches/mod_forum_lib.php.patch
     dest: "{{ moodle_location }}/mod/forum/lib.php"
