@@ -58,7 +58,7 @@ moodle_plugins:
     service: github
     tag: v1.0.0
     
-    # Your github personal access token. I'll use mine from above...
+    # Your github personal access token.
     auth: "MYSECRETGITHUBTOKEN"
 
 # Patches to apply to the Moodle installation. The "patches" folder is supplied
