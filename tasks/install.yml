@@ -67,6 +67,13 @@
     chdir: "{{ moodle_location }}"
     creates: config.php
 
+- name: Write extra parameters to the config file
+  lineinfile:
+    dest: "{{ moodle_location }}/config.php"
+    line: "$CFG->{{ item.name }} = {{ item.value }};"
+    insertbefore: "require_once\\(dirname\\(__FILE__\\) \\. '/lib/setup.php'\\);"
+  with_items: "{{ moodle_extra_config }}"
+
 # Import a database dump
 - name: Copy the database dump file
   copy: src={{ playbook_dir }}/{{ moodle_db_import }} dest=/tmp

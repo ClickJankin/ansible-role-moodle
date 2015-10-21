@@ -27,6 +27,25 @@ moodle_fullname:    "Moodle Virtual Machine"
 moodle_shortname:   "MoodleVM"
 moodle_summary:     "A virtual machine for developing Moodle."
 
+# Extra configuration. Optional configuration to write to config.php
+moodle_extra_config:
+  - name: divertallemailsto
+
+    # Notice the double set of quotes. This is going to be output to a php file
+    # like this:
+    #
+    # $CFG->{{ name }} = {{ value }};
+    #
+    # So, if the value is a string and therefor needs to be quoted, you need to
+    # do it twice.
+    value: "'you@company.com'"
+  - name: debugdisplay
+    value: 1
+  - name: debug
+    value: "(E_ALL | E_STRICT)"
+  - name: noemailever
+    value: "true"
+
 # Version of moodle to get, defaults to HEAD
 moodle_tag:         v2.8.5
 
