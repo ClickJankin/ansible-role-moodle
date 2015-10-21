@@ -37,7 +37,7 @@ moodle_extra_config:
     # $CFG->{{ name }} = {{ value }};
     #
     # So, if the value is a string and therefor needs to be quoted, you need to
-    # do it twice.
+    # do it twice as the first set are ignored by YAML.
     value: "'you@company.com'"
   - name: debugdisplay
     value: 1
