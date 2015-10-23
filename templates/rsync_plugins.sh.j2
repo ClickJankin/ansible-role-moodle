@@ -3,10 +3,8 @@
 while true
 do
   {% for plugin in moodle_plugins_dev -%}
-
   rsync -r --delete {{ plugin.location }}/ {{ moodle_location }}/{{ plugin.destination }}/{{ plugin.shortname }}/
+  {% endfor %}
 
   sleep 1
-
-  {% endfor %}
 done
