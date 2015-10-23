@@ -1,11 +1,7 @@
 ---
 - name: Create custom plugin directories
   file: 
-    path: "{{  
-      moodle_location ~ '/' ~ 
-      item.type | regex_replace('block', 'blocks') ~ 
-      item.location | regex_replace(item.location | dirname, '') 
-    }}"
+    path: "{{ moodle_location }}/{{ item.destination }}/{{ item.shortname }}"
     state: directory
   with_items: "{{ moodle_plugins_dev }}"
   
