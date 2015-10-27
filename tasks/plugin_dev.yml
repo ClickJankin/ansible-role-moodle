@@ -13,6 +13,12 @@
   register: rsync_running
   failed_when: "'FAILED' in rsync_running.stdout"
   
+- name: Make sure the sync script starts on startup
+  lineinfile:
+    line: /bin/bash /root/rsync_plugins.sh &
+    insertbefore: "exit 0"
+    dest: /etc/rc.local
+  
 - name: Run rsync script to synchronize plugins
   shell: /bin/bash ~/rsync_plugins.sh &
   async: 5
