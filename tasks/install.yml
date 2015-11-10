@@ -60,7 +60,7 @@
       --adminemail='{{ moodle_adminemail }}'
       --summary='{{ moodle_summary }}'
     {% endif %}
-    {% if moodle_db_import is defined and moodle_version > 2.8 %}
+    {% if moodle_db_import is defined and moodle_version > 2.9 %}
       --skip-database
     {% endif %}
   args:
