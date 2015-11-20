@@ -1,5 +1,5 @@
 ---
-- name: Remove install base is it exists
+- name: Remove install base if it exists
   file: path={{ moodle_location }} state=absent
 
 - name: Make sure the moodle install base is present
@@ -18,14 +18,22 @@
     group:  "{{ apache_group }}"
     mode:   0755
   
-- name: Clone the moodle git repo
-  git:
-    repo: https://github.com/moodle/moodle.git
-    dest: "{{ moodle_location }}"
-    version: "{{ moodle_tag }}"
-    
-- name: Remove git folder
-  file: path="{{ moodle_location }}/.git" state=absent
+- name: Create a directory for tasc config
+  file: path={{ moodle_config_dir }} state=directory
+
+- name: Create the manifest file
+  template: src=manifest.yml.j2 dest={{ moodle_config_dir }}/manifest.yml
+  
+- name: Create patch directory
+  file: path={{ moodle_config_dir }}/patches state=directory
+  
+- name: Write patch files
+  copy: src={{ item.src }} dest={{ moodle_config_dir }}/patches/{{ item.src|basename }}
+  with_items: "{{ moodle_patches }}"
+  
+# Assemble moodle
+- name: Assemble moodle source code
+  command: tasc --manifest={{ moodle_config_dir }}/manifest.yml --destination={{ moodle_location }}
   
 # Install moodle if an import is not specified
 - name: Remove the moodle database if it exists

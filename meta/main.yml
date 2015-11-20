@@ -1,5 +1,6 @@
 ---
-dependencies: []
+dependencies:
+  - "git+https://github.com/hcpss-banderson/ansible-role-tasc,master,hcpss.tasc"
 
 galaxy_info:
   author: hcpss-banderson

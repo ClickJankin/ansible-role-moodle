@@ -1,0 +1,33 @@
+---
+projects:
+  # Moodle core
+  - provider: git
+    source: "https://github.com/moodle/moodle.git"
+    tag: {{ moodle_tag }}
+
+  # Plugins
+{% for plugin in moodle_plugins %}
+  - provider: {% if plugin.service is defined and plugin.service == 'github' %}git{% else %}zip{% endif %}
+
+    rename: {{ plugin.shortname }}
+{% if plugin.auth is defined %}
+    source: {{ plugin.url|regex_replace('https://github.com', 'https://'~plugin.auth~':x-oauth-basic@github.com') }}
+{% else %}
+    source: {{ plugin.url }}
+{% endif %}
+    destination: {{ plugin.destination }}
+{% if plugin.tag is defined %}
+    tag: {{ plugin.tag }}
+{% endif %}
+{% if plugin.branch is defined %}
+    branch: {{ plugin.branch }}
+{% endif %}
+{% endfor %}
+
+# Patches
+patches:
+{% for patch in moodle_patches %}
+  - type: patch_file
+    source: {{ patch.src }}
+    destination: {{ patch.dest }}
+{% endfor %}

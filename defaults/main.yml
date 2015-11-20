@@ -17,3 +17,4 @@ moodle_plugins_dev:     []
 moodle_patches:         []
 moodle_tag:             HEAD
 moodle_extra_config:    []
+moodle_config_dir:      /srv/moodle_config
