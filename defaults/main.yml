@@ -18,3 +18,4 @@ moodle_patches:         []
 moodle_tag:             HEAD
 moodle_extra_config:    []
 moodle_config_dir:      /srv/moodle_config
+moodle_manifest:        null

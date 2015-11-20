@@ -2,11 +2,11 @@
 # Install prerequisites
 - include: prerequisites.yml
 
+# Assemble Moodle
+- include: assemble.yml
+
 # Install Moodle
 - include: install.yml
 
 # Copy dev plugins to Moodle
 - include: plugin_dev.yml
-
-# Apply any patches
-- include: patch.yml
