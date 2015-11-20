@@ -106,4 +106,22 @@ moodle_plugins_dev:
 moodle_patches:
   - src: patches/mod_forum_lib.php.patch
     dest: "{{ moodle_location }}/mod/forum/lib.php"
+    
+# This role now uses Tasc the generic Tool for Assembling Source Code to 
+# assemble Moodle. That means that you can specify a remote Manifest to use to
+# build Moodle. Take a look at Tasc documentation for details on Manifast files:
+# 
+# <https://github.com/hcpss-banderson/tasc>
+# 
+# Your manifest and patches can be stored in a github repo:
+moodle_manifest:
+  type: git
+  url: "https://github.com/hcpss-banderson/moodle-manifest.git"
+  
+  # Branch or tag
+  version: master
+  
+  # Or in a remote zip file
+  type: zip
+  url: https://github.com/hcpss-banderson/moodle-manifest/archive/master.zip
 ```
