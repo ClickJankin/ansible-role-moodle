@@ -76,4 +76,9 @@
   
 # Assemble moodle
 - name: Assemble moodle source code
-  command: tasc --manifest={{ moodle_config_dir }}/manifest.yml --destination={{ moodle_location }}
+  command: tasc 
+    --manifest={{ moodle_config_dir }}/manifest.yml 
+    --destination={{ moodle_location }}
+    {% if moodle_tasc_extra_params %}
+      --extra-parameters='{{ '{' }}{% for param in moodle_tasc_extra_params %}"{{ param.name }}":"{{ param.value }}"{% endfor %}{{ '}' }}'
+    {% endif %}
