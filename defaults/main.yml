@@ -20,3 +20,11 @@ moodle_extra_config:      []
 moodle_config_dir:        /srv/moodle_config
 moodle_manifest:          null
 moodle_tasc_extra_params: []
+
+# The default installation method is git. Acceptable values are git, local and 
+# manifest.
+moodle_install_method:    git
+
+
+
+

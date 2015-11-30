@@ -1,6 +1,7 @@
 ---
 - name: Remove install base if it exists
   file: path={{ moodle_location }} state=absent
+  when: moodle_install_method != 'local'
 
 - name: Make sure the moodle install base is present
   file: 
@@ -9,6 +10,7 @@
     owner:  "{{ apache_user }}"
     group:  "{{ apache_group }}"
     mode:   0755
+  when: moodle_install_method != 'local'
 
 - name: Make sure we have a moodle data directory
   file:
@@ -20,38 +22,39 @@
   
 - name: Create a directory for tasc config
   file: path={{ moodle_config_dir }} state=directory
+  when: moodle_install_method != 'local'
 
 - name: Create the manifest file
   template: src=manifest.yml.j2 dest={{ moodle_config_dir }}/manifest.yml
-  when: moodle_manifest == None
+  when: moodle_manifest == None and moodle_install_method != 'local'
   
 - name: Create patch directory
   file: path={{ moodle_config_dir }}/patches state=directory
-  when: moodle_manifest == None
+  when: moodle_manifest == None and moodle_install_method != 'local'
   
 - name: Write patch files
   copy: src={{ item.src }} dest={{ moodle_config_dir }}/patches/{{ item.src|basename }}
   with_items: "{{ moodle_patches }}"
-  when: moodle_manifest == None
+  when: moodle_manifest == None and moodle_install_method != 'local'
   
 - name: Get manifest from git
   git:
     repo: "{{ moodle_manifest.url }}"
     version: "{{ moodle_manifest.version|default('master') }}"
     dest: "{{ moodle_config_dir }}"
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'git'
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'git' and moodle_install_method != 'local'
   
 - name: Get manifest from remote zip
   get_url:
     url: "{{ moodle_manifest.url }}"
     dest: "/tmp"
   register: moodle_manifest_zip
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip'
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
 
 - name: Unarchive manifest zip
   unarchive: src={{ moodle_manifest_zip.dest }} dest=/tmp copy=no
   register: moodle_manifest_unarchive
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip'
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
   
 # Now we have extracted the archive of the manifest, but it's in a folder that
 # we do not know the name of. Like this: 
@@ -67,12 +70,12 @@
     manifest_tmp_location: "{{
       moodle_manifest_unarchive.extract_results.out.split('\n')[2].split('/')[2]
     }}"
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip'
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
   # That was gross
   
 - name: Move the manifest
   shell: "mv /tmp/{{ manifest_tmp_location }}/* {{ moodle_config_dir }}"
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip'
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
   
 # Assemble moodle
 - name: Assemble moodle source code
@@ -82,3 +85,4 @@
     {% if moodle_tasc_extra_params %}
       --extra-parameters='{{ '{' }}{% for param in moodle_tasc_extra_params %}"{{ param.name }}":"{{ param.value }}"{% endfor %}{{ '}' }}'
     {% endif %}
+  when: moodle_install_method != 'local'

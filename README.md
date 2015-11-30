@@ -46,8 +46,16 @@ moodle_extra_config:
   - name: noemailever
     value: "true"
 
-# Version of moodle to get, defaults to HEAD
-moodle_tag:         v2.8.5
+# Where do you want to get the Moodle core code from? Available options are:
+#
+# git:      Get Moodle from github
+# manifest: Defer to a Tasc Manifest
+# local:    Don't get the code. Specify where the code is by setting 
+#           moodle_location
+moodle_install_method:  git
+
+# Version of moodle to get if using git, defaults to HEAD
+moodle_tag:             v2.8.5
 
 # Moodle plugins from moodle.org or github
 moodle_plugins:
