@@ -7,6 +7,8 @@
 
 # Install Moodle
 - include: install.yml
+  when: moodle_assemble_only == false
 
 # Copy dev plugins to Moodle
 - include: plugin_dev.yml
+  when: moodle_plugins_dev|length > 0
