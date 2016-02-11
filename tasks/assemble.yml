@@ -7,8 +7,8 @@
   file: 
     path: "{{ moodle_location }}"
     state: directory
-    owner:  "{{ apache_user }}"
-    group:  "{{ apache_group }}"
+    owner:  "{{ moodle_install_owner }}"
+    group:  "{{ moodle_install_group }}"
     mode:   0755
   when: moodle_install_method != 'local'
 
@@ -16,8 +16,8 @@
   file:
     path:   "{{ moodle_dataroot }}"
     state:  directory
-    owner:  "{{ apache_user }}"
-    group:  "{{ apache_group }}"
+    owner:  "{{ moodle_data_owner }}"
+    group:  "{{ moodle_data_group }}"
     mode:   0755
   
 - name: Create a directory for tasc config
@@ -59,9 +59,9 @@
 # Now we have extracted the archive of the manifest, but it's in a folder that
 # we do not know the name of. Like this: 
 #
-# /tml/{{ not_sure }}/manifest.yml
+# /tmp/{{ not_sure }}/manifest.yml
 # 
-# I order to figure that out, we need to inspect the output of the unzip 
+# In order to figure that out, we need to inspect the output of the unzip 
 # command stored in moodle_manifest_unarchive.extract_results.out. I am 
 # asserting that it is stored in the first line beginning with "creating:".
 #
@@ -73,16 +73,20 @@
   when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
   # That was gross
   
+- name: Make sure the target manifest directory is empty
+  file: path={{ moodle_config_dir }} state=absent
+- file: path={{ moodle_config_dir }} state=directory
+  
 - name: Move the manifest
   shell: "mv /tmp/{{ manifest_tmp_location }}/* {{ moodle_config_dir }}"
   when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
   
 # Assemble moodle
 - name: Assemble moodle source code
-  command: tasc 
+  command: "{{ moodle_pytasc_executable }} 
     --manifest={{ moodle_config_dir }}/manifest.yml 
     --destination={{ moodle_location }}
     {% if moodle_tasc_extra_params %}
-      --extra-parameters='{{ '{' }}{% for param in moodle_tasc_extra_params %}"{{ param.name }}":"{{ param.value }}"{% endfor %}{{ '}' }}'
-    {% endif %}
+      --extra-parameters='{{ '{' }}{% for param in moodle_tasc_extra_params %}\"{{ param.name }}\":\"{{ param.value }}\"{% endfor %}{{ '}' }}'
+    {% endif %}"
   when: moodle_install_method != 'local'
