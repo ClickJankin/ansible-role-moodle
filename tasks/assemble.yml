@@ -20,8 +20,10 @@
     group:  "{{ moodle_data_group }}"
     mode:   0755
   
-- name: Create a directory for tasc config
-  file: path={{ moodle_config_dir }} state=directory
+- name: Create an empty directory for tasc config
+  file: path={{ moodle_config_dir }} state=absent
+  when: moodle_install_method != 'local'
+- file: path={{ moodle_config_dir }} state=directory
   when: moodle_install_method != 'local'
 
 - name: Create the manifest file
@@ -72,10 +74,6 @@
     }}"
   when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
   # That was gross
-  
-- name: Make sure the target manifest directory is empty
-  file: path={{ moodle_config_dir }} state=absent
-- file: path={{ moodle_config_dir }} state=directory
   
 - name: Move the manifest
   shell: "mv /tmp/{{ manifest_tmp_location }}/* {{ moodle_config_dir }}"
