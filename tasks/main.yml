@@ -5,6 +5,10 @@
 # Assemble Moodle
 - include: assemble.yml
 
+# Configure Moodle
+- include: configure.yml
+  when: moodle_assemble_only
+
 # Install Moodle
 - include: install.yml
   when: moodle_assemble_only == false

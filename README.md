@@ -19,7 +19,11 @@ moodle_dataroot:    /srv/moodledata
 moodle_wwwroot:     http://moodle-vm.dev
 moodle_version:     2.8
 
-# Installation parameters
+# If set to true, moodle will be assembled and configured, but not installed 
+# (the database will not be touched).
+moodle_assemble_only: false 
+
+# Installation parameters (needed if you are not doing an assemble-only build)
 moodle_adminuser:   root
 moodle_adminpass:   root
 moodle_adminemail:  you@example.com

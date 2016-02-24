@@ -1,4 +1,6 @@
 ---
+moodle_db_host:           localhost
+moodle_db_prefix:         mdl_
 moodle_db_name:           moodle
 moodle_db_username:       moodle
 moodle_db_password:       moodle
@@ -6,6 +8,7 @@ moodle_location:          /srv/moodle
 moodle_version:           2.9
 moodle_dataroot:          /srv/moodledata
 moodle_wwwroot:           http://moodle-vm.dev
+moodle_passwordsaltmain:  SOMESALT
 moodle_adminuser:         root
 moodle_adminpass:         root
 moodle_adminemail:        example@example.com
