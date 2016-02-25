@@ -1,0 +1,22 @@
+---
+- name: Remove install base if it exists
+  file: path={{ moodle_location }} state=absent
+
+- name: Make sure the moodle install base is present
+  file: 
+    path: "{{ moodle_location }}"
+    state: directory
+    owner:  "{{ moodle_install_owner }}"
+    group:  "{{ moodle_install_group }}"
+    mode:   0755
+
+- name: Make sure we have a moodle data directory
+  file:
+    path:   "{{ moodle_dataroot }}"
+    state:  directory
+    owner:  "{{ moodle_data_owner }}"
+    group:  "{{ moodle_data_group }}"
+    mode:   0755
+
+- name: Create an empty directory for tasc config
+  file: path={{ moodle_config_dir }} state=directory

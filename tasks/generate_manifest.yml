@@ -1,0 +1,10 @@
+---
+- name: Create the manifest file
+  template: src=manifest.yml.j2 dest={{ moodle_config_dir }}/manifest.yml
+  
+- name: Create patch directory
+  file: path={{ moodle_config_dir }}/patches state=directory
+  
+- name: Write patch files
+  copy: src={{ item.src }} dest={{ moodle_config_dir }}/patches/{{ item.src|basename }}
+  with_items: "{{ moodle_patches }}"

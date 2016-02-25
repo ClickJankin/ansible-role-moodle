@@ -4,6 +4,7 @@
 
 # Assemble Moodle
 - include: assemble.yml
+  when: moodle_install_method != 'local'
 
 # Configure Moodle
 - include: configure.yml

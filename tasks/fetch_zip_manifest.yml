@@ -1,0 +1,30 @@
+---
+- name: Get manifest from remote zip
+  get_url:
+    url: "{{ moodle_manifest.url }}"
+    dest: "/tmp"
+  register: moodle_manifest_zip
+
+- name: Unarchive manifest zip
+  unarchive: src={{ moodle_manifest_zip.dest }} dest=/tmp copy=no
+  register: moodle_manifest_unarchive
+  
+# Now we have extracted the archive of the manifest, but it's in a folder that
+# we do not know the name of. Like this: 
+#
+# /tmp/{{ not_sure }}/manifest.yml
+# 
+# In order to figure that out, we need to inspect the output of the unzip 
+# command stored in moodle_manifest_unarchive.extract_results.out. I am 
+# asserting that it is stored in the first line beginning with "creating:".
+#
+# Let's try to parse it...
+- set_fact:
+    manifest_tmp_location: "{{
+      moodle_manifest_unarchive.extract_results.out.split('\n')[2].split('/')[2]
+    }}"
+  # That was gross
+  
+- name: Move the manifest
+  shell: "mv /tmp/{{ manifest_tmp_location }}/* {{ moodle_config_dir }}"
+  

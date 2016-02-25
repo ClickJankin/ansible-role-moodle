@@ -136,4 +136,7 @@ moodle_manifest:
   # Or in a remote zip file
   type: zip
   url: https://github.com/hcpss-banderson/moodle-manifest/archive/master.zip
+  
+  # Or locally which would just use the manifest located in moodle_config_dir.
+  type: local
 ```

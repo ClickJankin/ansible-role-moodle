@@ -1,83 +1,14 @@
 ---
-- name: Remove install base if it exists
-  file: path={{ moodle_location }} state=absent
-  when: moodle_install_method != 'local'
+- include: prepare_environment.yml
 
-- name: Make sure the moodle install base is present
-  file: 
-    path: "{{ moodle_location }}"
-    state: directory
-    owner:  "{{ moodle_install_owner }}"
-    group:  "{{ moodle_install_group }}"
-    mode:   0755
-  when: moodle_install_method != 'local'
+- include: generate_manifest.yml
+  when: moodle_manifest == None
 
-- name: Make sure we have a moodle data directory
-  file:
-    path:   "{{ moodle_dataroot }}"
-    state:  directory
-    owner:  "{{ moodle_data_owner }}"
-    group:  "{{ moodle_data_group }}"
-    mode:   0755
-  
-- name: Create an empty directory for tasc config
-  file: path={{ moodle_config_dir }} state=absent
-  when: moodle_install_method != 'local'
-- file: path={{ moodle_config_dir }} state=directory
-  when: moodle_install_method != 'local'
+- include: fetch_git_manifest.yml
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'git'
 
-- name: Create the manifest file
-  template: src=manifest.yml.j2 dest={{ moodle_config_dir }}/manifest.yml
-  when: moodle_manifest == None and moodle_install_method != 'local'
-  
-- name: Create patch directory
-  file: path={{ moodle_config_dir }}/patches state=directory
-  when: moodle_manifest == None and moodle_install_method != 'local'
-  
-- name: Write patch files
-  copy: src={{ item.src }} dest={{ moodle_config_dir }}/patches/{{ item.src|basename }}
-  with_items: "{{ moodle_patches }}"
-  when: moodle_manifest == None and moodle_install_method != 'local'
-  
-- name: Get manifest from git
-  git:
-    repo: "{{ moodle_manifest.url }}"
-    version: "{{ moodle_manifest.version|default('master') }}"
-    dest: "{{ moodle_config_dir }}"
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'git' and moodle_install_method != 'local'
-  
-- name: Get manifest from remote zip
-  get_url:
-    url: "{{ moodle_manifest.url }}"
-    dest: "/tmp"
-  register: moodle_manifest_zip
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
-
-- name: Unarchive manifest zip
-  unarchive: src={{ moodle_manifest_zip.dest }} dest=/tmp copy=no
-  register: moodle_manifest_unarchive
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
-  
-# Now we have extracted the archive of the manifest, but it's in a folder that
-# we do not know the name of. Like this: 
-#
-# /tmp/{{ not_sure }}/manifest.yml
-# 
-# In order to figure that out, we need to inspect the output of the unzip 
-# command stored in moodle_manifest_unarchive.extract_results.out. I am 
-# asserting that it is stored in the first line beginning with "creating:".
-#
-# Let's try to parse it...
-- set_fact:
-    manifest_tmp_location: "{{
-      moodle_manifest_unarchive.extract_results.out.split('\n')[2].split('/')[2]
-    }}"
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
-  # That was gross
-  
-- name: Move the manifest
-  shell: "mv /tmp/{{ manifest_tmp_location }}/* {{ moodle_config_dir }}"
-  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip' and moodle_install_method != 'local'
+- include: fetch_zip_manifest.yml
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'zip'
   
 # Assemble moodle
 - name: Assemble moodle source code
@@ -87,4 +18,3 @@
     {% if moodle_tasc_extra_params %}
       --extra-parameters='{{ '{' }}{% for param in moodle_tasc_extra_params %}\"{{ param.name }}\":\"{{ param.value }}\"{% endfor %}{{ '}' }}'
     {% endif %}"
-  when: moodle_install_method != 'local'

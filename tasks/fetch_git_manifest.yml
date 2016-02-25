@@ -1,0 +1,7 @@
+---
+- name: Get manifest from git
+  git:
+    repo: "{{ moodle_manifest.url }}"
+    version: "{{ moodle_manifest.version|default('master') }}"
+    dest: "{{ moodle_config_dir }}"
+  when: moodle_manifest.type is defined and moodle_manifest.type == 'git'
