@@ -24,6 +24,10 @@ $CFG->directorypermissions = 0777;
 
 $CFG->passwordsaltmain = '{{ moodle_passwordsaltmain }}';
 
+{% for config in moodle_extra_config %}
+    $CFG->{{ config.name }} = {{ config.value }};
+{% endfor %}
+
 require_once(dirname(__FILE__) . '/lib/setup.php');
 
 // There is no php closing tag in this file,
