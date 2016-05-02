@@ -1,7 +1,4 @@
 ---
-- name: Remove install base if it exists
-  file: path={{ moodle_location }} state=absent
-
 - name: Make sure the moodle install base is present
   file: 
     path: "{{ moodle_location }}"
