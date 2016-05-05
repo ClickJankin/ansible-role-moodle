@@ -4,6 +4,7 @@ moodle_db_prefix:         mdl_
 moodle_db_name:           moodle
 moodle_db_username:       moodle
 moodle_db_password:       moodle
+moodle_db_port:           3306
 moodle_location:          /srv/moodle
 moodle_version:           2.9
 moodle_dataroot:          /srv/moodledata
