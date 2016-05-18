@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - "git+https://github.com/hcpss-banderson/ansible-role-py_tasc,master,hcpss.pytasc"
+  - "git+https://github.com/HCPSS/ansible-role-py_tasc,master,hcpss.pytasc"
 
 galaxy_info:
   author: hcpss-banderson
